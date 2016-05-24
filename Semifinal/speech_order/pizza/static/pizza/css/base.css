@@ -1,0 +1,14 @@
+html {
+    cursor: url('/static/pizza/images/cursor.cur'), auto;
+}
+.container {
+    width: 480px;
+    margin: auto;
+}
+header {
+    text-align: center;
+}
+header a, header a:hover {
+    text-decoration: none;
+    color: #000;
+}

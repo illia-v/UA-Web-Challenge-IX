@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% block title %}
+        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% load static %}
+        <link rel="shortcut icon" href="{% static 'pizza/images/favicon.ico' %}" type="image/x-icon">
+        <link rel="stylesheet" href="{% static 'pizza/css/base.css' %}">
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <a href="{% url 'pizza:index' %}"><h1>Order a Pizza</h1></a>
+            </header>
+            <section>
+                {% block main_section %}
+                {% endblock %}
+            </section>
+        </div>
+    </body>
+
+    {% block scripts %}
+    {% endblock %}
+</html>

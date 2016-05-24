@@ -1,0 +1,17 @@
+.container {
+    width: 480px;
+    margin: auto;
+}
+header {
+    text-align: center;
+}
+header h1 {
+    margin-bottom: 0;
+}
+header p {
+    margin: 0;
+}
+header a, header a:hover {
+    text-decoration: none;
+    color: #000;
+}

@@ -1,0 +1,30 @@
+{% extends 'pizza/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Order a Pizza</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'pizza/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'pizza/css/jquery.datetimepicker.css' %}">
+{% endblock %}
+
+{% block main_section %}
+    <h3>Enter your name:</h3>
+    <div id="input">
+        <form>
+            {% csrf_token %}
+            <img src="{% static 'pizza/images/microphone0.png' %}">
+            <input type="text" id="data-input">
+            <button id="submit" type="submit">Enter</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'pizza/js/jquery-2.2.3.min.js' %}"></script>
+    <script src="{% static 'pizza/js/jquery.datetimepicker.full.min.js' %}"></script>
+    <script src="{% static 'pizza/js/speech_recognition.js' %}"></script>
+    <script src="{% static 'pizza/js/get_information.js' %}"></script>
+{% endblock %}

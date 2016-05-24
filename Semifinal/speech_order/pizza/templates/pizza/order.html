@@ -1,0 +1,65 @@
+{% extends 'pizza/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Order #{{ order.id }}</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'pizza/css/order.css' %}">
+{% endblock %}
+
+{% block main_section %}
+    <div id="order">
+        <table width="100%">
+            <caption align="center"><h2>Order #{{ order.id }}</h2></caption>
+            <tr>
+                <td><b>Status</b></td>
+                <td>{{ order.status }}</td>
+            </tr>
+            <tr>
+                <td>Orderer</td>
+                <td>{{ order.orderer_name }}</td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td>{{ order.orderer_phone_number }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ order.orderer_address }}</td>
+            </tr>
+            <tr>
+                <td>Pizza</td>
+                <td>{{ order.pizza }}</td>
+            </tr>
+            <tr>
+                <td>Pizzeria</td>
+                <td>{{ order.pizzeria }}</td>
+            </tr>
+            <tr>
+                <td>Drink</td>
+                <td>{{ order.drink }}</td>
+            </tr>
+            <tr>
+                <td>Payment method</td>
+                <td>{{ order.method_of_payment }}</td>
+            </tr>
+            <tr>
+                <td>Delivery date</td>
+                <td>{{ order.date_of_delivery }}</td>
+            </tr>
+            <tr>
+               <td>Ordering date</td>
+                <td>{{ order.date_time_of_order }}</td>
+            </tr>
+        </table>
+        {% if 'Our Pizzeria' in order.status %}
+            <p align="center"><em>
+                You can click
+                <a href="{% url 'our_pizzeria:order' order.slug %}" target="_blank">here</a>
+                to see the order status in Our Pizzeria!
+            </em></p>
+        {% endif %}
+    </div>
+{% endblock %}

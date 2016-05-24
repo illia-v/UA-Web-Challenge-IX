@@ -1,0 +1,10 @@
+h2 {
+    margin: 0 auto 5px;
+}
+a, a:hover {
+    text-decoration: none;
+    color: #000;
+}
+a {
+    border-bottom: dashed 1px #000;
+}
