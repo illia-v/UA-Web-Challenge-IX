@@ -1,0 +1,47 @@
+{% extends 'statistics_app/base.html' %}
+
+{% block title %}
+    <title>Top 25 Repositories | GitHub Statistics</title>
+{% endblock %}
+
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'statistics_app/css/top.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2>
+        The {{ period }}'s most popular GitHub repositories
+        {% if period == 'week' %}
+            <a href="{% url 'repos_by_stars' %}?period=month"><button class="btn btn-default btn-xs">load month's top</button></a>
+        {% endif %}
+        {% if period == 'month' %}
+            <a href="{% url 'repos_by_stars' %}?period=week"><button class="btn btn-default btn-xs">load week's top</button></a>
+        {% endif %}
+    </h2>
+    <table class="table">
+        <tr>
+            <th>#</th>
+            <th>Repository</th>
+            <th>Author</th>
+            <th>Stars</th>
+        </tr>
+        {% for repo in top %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                {% for detail in repo %}
+                    {% if forloop.counter == 1 %}
+                        {% for foo in repo %}
+                            {% if forloop.counter == 2 %}
+                                <td><a href="{% url 'repo_details' login=foo repo=detail %}">{{ detail }}</a></td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if forloop.counter != 1 %}
+                        <td>{{ detail }}</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

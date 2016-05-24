@@ -1,0 +1,18 @@
+body {
+    background-color: #E1E1FB !important;
+}
+.body {
+    color: #6B4484;
+}
+header h1 {
+    font-size: 50px;
+    text-shadow: 1px 1px #000;
+}
+header a, header a:hover {
+    text-decoration: none;
+    color: #337ab7;
+}
+.nav {
+    float: right;
+    text-align: center;
+}

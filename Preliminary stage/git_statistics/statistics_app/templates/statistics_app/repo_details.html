@@ -1,0 +1,171 @@
+{% extends 'statistics_app/base.html' %}
+
+
+{% block title %}
+    {% if not rate_limit and not not_found %}
+        <title>{{ repo.name }} | GitHub Statistics</title>
+    {% endif %}
+
+    {% if rate_limit %}
+        <title>403 | GitHub Statistics</title>
+    {% endif %}
+
+    {% if not_found %}
+        <title>404 | GitHub Statistics</title>
+    {% endif %}
+{% endblock %}
+
+
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'statistics_app/css/repo_details.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    {% if not rate_limit and not not_found %}
+
+        <h2>
+            <a href="{{ repo.html_url }}" target="_blank">{{ repo.name }}</a>
+            <small><small>({{ repo.language }})</small></small>
+        </h2>
+
+        <p>
+            <a class="github-button" href="https://github.com/{{ repo.owner.login }}/{{ repo.name }}" data-icon="octicon-eye" data-count-href="{{ repo.name }}/watchers" data-count-api="/repos/{{ repo.owner.login }}/{{ repo.name }}#subscribers_count" data-count-aria-label="# watchers on GitHub" aria-label="Watch {{ repo.owner.login }}/{{ repo.name }} on GitHub">Watch</a>
+            <a class="github-button" href="https://github.com/{{ repo.owner.login }}/{{ repo.name }}" data-icon="octicon-star" data-count-href="/{{ repo.owner.login }}/{{ repo.name }}/stargazers" data-count-api="/repos/{{ repo.owner.login }}/{{ repo.name }}#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star {{ repo.owner.login }}/{{ repo.name }} on GitHub">Star</a>
+            <a class="github-button" href="https://github.com/{{ repo.owner.login }}/{{ repo.name }}/fork" data-icon="octicon-repo-forked" data-count-href="/{{ repo.owner.login }}/{{ repo.name }}/network" data-count-api="/repos/{{ repo.owner.login }}/{{ repo.name }}#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork {{ repo.owner.login }}/{{ repo.name }} on GitHub">Fork</a>
+            <a class="github-button" href="https://github.com/{{ repo.owner.login }}/{{ repo.name }}/archive/master.zip" data-icon="octicon-cloud-download" aria-label="Download {{ repo.owner.login }}/{{ repo.name }} on GitHub">Download</a>
+        </p>
+
+        <p><small>
+            By <a href="https://github.com/{{ repo.owner.login }}" target="_blank">{{ repo.owner.name }}</a>
+            on {{ repo.created_at|date }}.
+            Last update: {{ repo.updated_at|date }}
+        </small></p>
+
+        <p class="description">{{ repo.description }}</p>
+
+        <div class="row">
+            <div id="week_commits" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="height: 250px;"></div>
+            <div id="month_commits" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="height: 250px;"></div>
+            <div id="week_contributors" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="height: 250px;"></div>
+            <div id="month_contributors" class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="height: 250px;"></div>
+        </div>
+    {% endif %}
+
+    {% if rate_limit %}
+        <h3>There is a higher API rate limit. Please wait a few minutes.</h3>
+    {% endif %}
+
+    {% if not_found %}
+        <h3>404: Owner and/or repository does not exist!</h3>
+    {% endif %}
+{% endblock %}
+
+
+{% if not rate_limit and not not_found %}
+    {% block scripts %}
+        <script src="{% static 'statistics_app/js/jquery.canvasjs.min.js' %}"></script>
+        <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+        {% if not rate_limit and not not_found %}
+            <script>
+            $(function () {
+                    var daysNames = [
+                        {% for name in week_days_names %}
+                            "{{ name }}",
+                        {% endfor %}
+                    ];
+
+                    var monthIntervals = [
+                        {% for interval in month_intervals %}
+                            "{{ interval }}",
+                        {% endfor %}
+                    ];
+
+
+                    var weekCommits = {
+                        title: {
+                            text: "Week's chart of commits",
+                            fontColor: "#717171"
+                        },
+                        animationEnabled: true,
+                        data: [
+                        {
+                            type: "column",
+                            dataPoints: [
+                                {% for commit in week_commits %}
+                                    { y: {{ commit }}, label: daysNames[{{ forloop.counter }}-1]},
+                                {% endfor %}
+                            ]
+                        }
+                        ],
+                        backgroundColor: "#E1E1FB"
+                    };
+
+                    var monthCommits = {
+                        title: {
+                            text: "Month's chart of commits",
+                            fontColor: "#717171"
+                        },
+                        animationEnabled: true,
+                        data: [
+                        {
+                            type: "column",
+                            dataPoints: [
+                                {% for commit in month_commits %}
+                                    { y: {{ commit }}, label: monthIntervals[{{ forloop.counter }}-1]},
+                                {% endfor %}
+                            ]
+                        }
+                        ],
+                        backgroundColor: "#E1E1FB"
+                    };
+
+                    var weekContributors = {
+                        title: {
+                            text: "Week's chart of contributors",
+                            fontColor: "#717171"
+                        },
+                        animationEnabled: true,
+                        data: [
+                        {
+                            type: "column",
+                            dataPoints: [
+                                {% for contributor in week_contributors %}
+                                    { y: {{ contributor }}, label: daysNames[{{ forloop.counter }}-1]},
+                                {% endfor %}
+                            ]
+                        }
+                        ],
+                        backgroundColor: "#E1E1FB"
+                    };
+
+                    var monthContributors = {
+                        title: {
+                            text: "Month's chart of contributors",
+                            fontColor: "#717171"
+                        },
+                        animationEnabled: true,
+                        data: [
+                        {
+                            type: "column",
+                            dataPoints: [
+                                {% for contributor in month_contributors %}
+                                    { y: {{ contributor }}, label: monthIntervals[{{ forloop.counter }}-1]},
+                                {% endfor %}
+                            ]
+                        }
+                        ],
+                        backgroundColor: "#E1E1FB"
+                    };
+
+                    $("#week_commits").CanvasJSChart(weekCommits);
+                    $("#month_commits").CanvasJSChart(monthCommits);
+                    $("#week_contributors").CanvasJSChart(weekContributors);
+                    $("#month_contributors").CanvasJSChart(monthContributors);
+                });
+            </script>
+        {% endif %}
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,35 @@
+{% extends 'statistics_app/base.html' %}
+
+{% block title %}
+    <title>GitHub Statistics</title>
+{% endblock %}
+
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'statistics_app/css/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Statistics of a certain project</h3>
+        <p>
+            {{ form }}
+            <input class="btn btn-info btn-sm" type="submit" value="Find!">
+        </p>
+    </form>
+    <br>
+    <div class="visited">
+        {% if visited != None %}
+            <h4>You have been interested about this today:</h4>
+            <ul>
+                {% for visit in visited %}
+                    <li><a href="/repositories/{{ visit }}" target="_blank">{{ visit }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if visited == None %}
+            <h4>You have not been interested about anything today or cookies are disabled in your browser.</h4>
+        {% endif %}
+    </div>
+{% endblock %}
